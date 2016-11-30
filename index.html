@@ -1,0 +1,61 @@
+<!--View-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sort Taco Restaurants</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<!--Contoller-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/lib/knockout-3.2.0.js" ></script>
+  <script src="js/lib/oauth-signature.js"></script>
+  <script src="js/lib/jquery-3.1.1.js"></script>
+  <script src="js/app.js"></script>
+
+  <meta charset="utf-8">
+  <title>Sort Taco Restaurants</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+
+
+<div id="mySidenav" class="sidenav">
+<a href="javascript:void(0)"class="closebtn" onclick="closeNav()">&times;</a>
+<a><u>Taco Restaurants</u></a>
+<ul data-bind="foreach: array" style="list-style-type:none" visible: "display">
+<li data-bind="text: $data"></li>
+</ul>
+<a>Sort By City</a>
+<ul><select data-bind="options: citys, value: dropDown, optionsCaption: 'Choose City'"></select></ul>
+
+</div>
+
+<div class="fullheader" >
+<h2 class="header" ><u>Find Taco Restaurants By City</u></h2><br>
+</div>
+<div class="hbdiv">
+<span  class="hb" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+</div>
+
+<div id="map"></div>
+
+
+
+
+
+  <script async defer
+   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhxjDlYEHraVbLSLRF9trxPSSs4YDQ4xo&v=3&callback=initMap">
+   </script>
+
+
+
+
+
+</body>
+</html>
