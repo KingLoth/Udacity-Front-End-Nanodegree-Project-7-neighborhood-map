@@ -129,35 +129,46 @@ var initMap = function() {
         });
 
         Model.markers.push(marker);
+
         Model.markers[i].setMap(map);
         bounds.extend(Model.markers[i].position);
 
         marker.addListener('click', function() {
+            this.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
             populateInfoWindow(this, largeInfowindow);
+
         });
+
         map.fitBounds(bounds);
         //drop marker
     }
 
-}
+};
+
+
 
 function populateInfoWindow(marker, infowindow) {
     //Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
 
+
+
+
         callYelpAPI(marker.id);
         infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
             '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' +
-            '<div id="ratepoop"></div> ');
+            '<div id="ratestars"></div> ');
 
         //callYelpAPI(marker.id)
 
         infowindow.open(map, marker);
         //Make sure the marker property is cleared if the infowindow is closed.
-        infowindow.addListener('closeclick', function() {
-            infowindow.setMarker(null);
-        });
+
+        //  infowindow.addListener('closeclick', function(){
+        //  marker.infowindow.close();
+        //  });
+
     }
 }
 
@@ -201,9 +212,10 @@ function callYelpAPI(i) {
         cache: true, // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
         dataType: 'jsonp',
         success: function(results) {
-            testCallback(results);
+            successCallback(results);
         },
         error: function() {
+            errorCallback(results);
             // Do stuff on fail
         }
     };
@@ -215,40 +227,46 @@ function callYelpAPI(i) {
 }
 
 
-function testCallback(response){
-  yelpRating = response.rating;
-  var ratingElement = document.getElementById('ratepoop');
-  //ratingElement.style.color = "red";
-  //ratingElement.innerHTML = yelpRating;
-  //console.log(yelpRating);
+function successCallback(response) {
+    yelpRating = response.rating;
+    var ratingElement = document.getElementById('ratestars');
+    //ratingElement.style.color = "red";
+    //ratingElement.innerHTML = yelpRating;
+    //console.log(yelpRating);
 
 
-  var wholeStars = 0;
-  var halfStar = 0; //.5
-  var wholeStars = Math.floor(yelpRating / 1);
-  var halfStar = yelpRating % 1; //.5
+    var wholeStars = 0;
+    var halfStar = 0; //.5
+    var wholeStars = Math.floor(yelpRating / 1);
+    var halfStar = yelpRating % 1; //.5
 
 
 
 
+    for (var a = 0; a < wholeStars; a++) {
 
-for (var a = 0 ; a < wholeStars ; a++)
-{
+        var img = document.createElement("img");
+        img.src = 'images/19x19_5.png';
+        ratingElement.appendChild(img);
 
-var img = document.createElement("img");
-img.src = 'images/19x19_5.png'  ;
-ratingElement.appendChild(img);
+    }
+
+
+    if (halfStar === .5) {
+
+        var img = document.createElement("img");
+        img.src = 'images/19x19_3_5.png';
+        ratingElement.appendChild(img);
+
+    }
+
 
 }
 
-
-if (halfStar === .5){
-
-var img = document.createElement("img");
-img.src = 'images/19x19_3_5.png'  ;
-ratingElement.appendChild(img);
-
-}
+function errorCallback(response) {
+    var ratingElement = document.getElementById('ratestars');
+    var t = document.createTextNode("Error With Yelp AJAX Request");
+    ratingElement.appendChild(t);
 
 }
 
