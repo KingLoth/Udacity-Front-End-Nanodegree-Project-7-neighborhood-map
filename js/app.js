@@ -144,7 +144,7 @@ var initMap = function() {
             populateInfoWindow(this, largeInfowindow);
 
         });
-
+/*
         map.addListener('click',function(){
           for (var b = 0; b < Model.markers.length; b++) {
               Model.markers[b].setMap(map);
@@ -152,11 +152,8 @@ var initMap = function() {
 
           }
         });
-        /*largeInfowindow.addListener('closeclick', function(){
-       console.log("poop");
+        */
 
-        })
-          */
 
 
 
