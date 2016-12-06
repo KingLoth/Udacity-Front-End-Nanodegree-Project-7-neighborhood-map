@@ -119,6 +119,7 @@ var initMap = function() {
 
 
         var marker = new google.maps.Marker({
+            Icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
             position: position,
             title: title,
             yelpId: yelpId,
@@ -134,10 +135,30 @@ var initMap = function() {
         bounds.extend(Model.markers[i].position);
 
         marker.addListener('click', function() {
+          for (var b = 0; b < Model.markers.length; b++) {
+              Model.markers[b].setMap(map);
+              Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+
+          }
             this.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
             populateInfoWindow(this, largeInfowindow);
 
         });
+
+        map.addListener('click',function(){
+          for (var b = 0; b < Model.markers.length; b++) {
+              Model.markers[b].setMap(map);
+              Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+
+          }
+        });
+        /*largeInfowindow.addListener('closeclick', function(){
+       console.log("poop");
+
+        })
+          */
+
+
 
         map.fitBounds(bounds);
         //drop marker
@@ -165,9 +186,12 @@ function populateInfoWindow(marker, infowindow) {
         infowindow.open(map, marker);
         //Make sure the marker property is cleared if the infowindow is closed.
 
-        //  infowindow.addListener('closeclick', function(){
-        //  marker.infowindow.close();
-        //  });
+        infowindow.addListener('closeclick', function(){
+          //marker.infowindow.close();
+          marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+          });
+
+
 
     }
 }
@@ -282,6 +306,8 @@ var ViewModel = function() {
 
             for (var b = 0; b < Model.markers.length; b++) {
                 Model.markers[b].setMap(map);
+                Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+
             }
             Model.vm.array.removeAll();
 
@@ -302,6 +328,8 @@ var ViewModel = function() {
 
             Model.vm.array.push(Model.locations[Model.vm.citys.indexOf(selection)].title);
             Model.markers[Model.vm.citys.indexOf(selection)].setMap(map);
+            Model.markers[Model.vm.citys.indexOf(selection)].setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+
 
         }
 
