@@ -5,6 +5,12 @@ html, body { height: 100%; margin: 0; padding: 0; }
 
     }
 
+
+    #markerSelect{
+      visibility: hidden;
+
+    }
+
 .header { margin: 0px;
         border: 0px;
         padding: 0px;
@@ -106,5 +112,5 @@ h1 {
 @media screen and (max-width:600px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
-  
+
 }

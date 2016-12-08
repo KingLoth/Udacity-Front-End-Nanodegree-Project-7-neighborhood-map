@@ -1,5 +1,8 @@
 //Model
 // Map Locations
+
+// make markers observables.
+
 var Model = {
     locations: [{
         title: 'El Famous Burrito',
@@ -48,6 +51,7 @@ var Model = {
         citys: ko.observableArray(),
         yelpId: ko.observableArray(),
         dropDown: ko.observable(),
+        markerSelect: ko.observable(),
 
         display: ko.observable(true),
         yelpRating: ko.observable()
@@ -66,10 +70,15 @@ var Model = {
 var yelpRating;
 
 //View
+
 var initMap = function() {
 
+
+
+
     ko.applyBindings(Model.vm);
-    viewmodel = new ViewModel();
+ //console.log(Model.vm.markerSelect());
+    var viewmodel = new ViewModel();
 
 
 
@@ -134,39 +143,69 @@ var initMap = function() {
         Model.markers[i].setMap(map);
         bounds.extend(Model.markers[i].position);
 
+
+
         marker.addListener('click', function() {
           for (var b = 0; b < Model.markers.length; b++) {
-              Model.markers[b].setMap(map);
-              Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                        Model.markers[b].setMap(map);
+                        Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
-          }
-            this.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+ //console.log(Model.vm.markerSelect());
+                    }
+
+          this.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
             populateInfoWindow(this, largeInfowindow);
 
+
+
+
+
+            //if (Model.vm.dropDown() > - 1){
+
+            //}
+
         });
-/*
-        map.addListener('click',function(){
-          for (var b = 0; b < Model.markers.length; b++) {
-              Model.markers[b].setMap(map);
-              Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+Model.vm.dropDown.subscribe(function(){
+  var z = document.getElementById("markerSelect").innerHTML;
+  console.log(z);
 
-          }
-        });
-        */
+  /*if(z == -1){
+    console.log("hellyeah");
+     for (var b = 0; b < Model.markers.length; b++) {
+    markers.infowindow.close(map,Model.markers[b]);
+  }
+}
+else
+{*/
+populateInfoWindow(Model.markers[z], largeInfowindow);
+//}
 
-
+});
 
 
         map.fitBounds(bounds);
         //drop marker
     }
-
+    //console.log(Model.vm.markerSelect());
+//console.log(Model.vm.citys());
 };
 
 
 
 function populateInfoWindow(marker, infowindow) {
     //Check to make sure the infowindow is not already opened on this marker.
+    var z = document.getElementById("markerSelect").innerHTML;
+    console.log(z);
+    if (z == -1){
+console.log('poop');
+  for (var b = 0; b < Model.markers.length; b++) {
+infowindow.close(map, Model.markers[b]);
+Model.vm.markerSelect("");
+
+
+  }
+    }
+else{
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
 
@@ -181,18 +220,17 @@ function populateInfoWindow(marker, infowindow) {
         //callYelpAPI(marker.id)
 
         infowindow.open(map, marker);
+        //infowindow.close(map, marker);
+
         //Make sure the marker property is cleared if the infowindow is closed.
 
         infowindow.addListener('closeclick', function(){
           //marker.infowindow.close();
           marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
           });
-
-
-
-    }
+  }
 }
-
+}
 
 
 function callYelpAPI(i) {
@@ -235,8 +273,9 @@ function callYelpAPI(i) {
         success: function(results) {
             successCallback(results);
         },
-        error: function() {
+        error: function(results) {
             errorCallback(results);
+            console.log(results);
             // Do stuff on fail
         }
     };
@@ -294,6 +333,8 @@ function errorCallback(response) {
 //ViewModel
 var ViewModel = function() {
 
+
+
     Model.vm.dropDown.subscribe(function(selection) {
 
 
@@ -301,16 +342,25 @@ var ViewModel = function() {
         // This checks if the "Choose City" element is selected in the drop down
         if (Model.vm.citys.indexOf(selection) === -1) {
 
+
+Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
             for (var b = 0; b < Model.markers.length; b++) {
-                Model.markers[b].setMap(map);
+
+              Model.markers[b].setVisible(true);
+
+
+              //poop here
+              //Model.markers[b].infowindow.close();
                 Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
-            }
-            Model.vm.array.removeAll();
 
-            for (var b = 0; b < Model.locations.length; b++) {
+
+            }
+
+            /*for (var b = 0; b < Model.locations.length; b++) {
                 Model.vm.array.push(Model.locations[b].title);
             }
+*/
         }
 
         // This checks what city is selected in the drop down
@@ -318,14 +368,23 @@ var ViewModel = function() {
 
 
             for (var i = 0; i < Model.markers.length; i++) {
-                Model.markers[i].setMap(null);
+                Model.markers[i].setVisible(false);
+             //console.log(Model.vm.citys().indexOf(selection));
             }
 
-            Model.vm.array.removeAll();
+            //Model.vm.array.removeAll();
 
-            Model.vm.array.push(Model.locations[Model.vm.citys.indexOf(selection)].title);
-            Model.markers[Model.vm.citys.indexOf(selection)].setMap(map);
-            Model.markers[Model.vm.citys.indexOf(selection)].setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+            //Model.vm.array.push(Model.locations[Model.vm.citys.indexOf(selection)].title);
+            Model.markers[Model.vm.citys.indexOf(selection)].setVisible(true);
+            //populateInfoWindow(Model.markers[Model.vm.citys.indexOf(selection)], InfoWindow);
+
+              Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
+              console.log(Model.vm.markerSelect());
+            //console.log(Model.vm.citys.indexOf(selection));
+              Model.markers[Model.vm.citys.indexOf(selection)].setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+
+              ;
+
 
 
         }
@@ -333,14 +392,16 @@ var ViewModel = function() {
 
 
     });
-}
+};
 
 
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
+
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+
 }
