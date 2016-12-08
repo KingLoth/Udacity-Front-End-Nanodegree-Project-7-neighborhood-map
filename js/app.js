@@ -128,7 +128,7 @@ var initMap = function() {
 
 
         var marker = new google.maps.Marker({
-            Icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+            Icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
             position: position,
             title: title,
             yelpId: yelpId,
@@ -148,12 +148,12 @@ var initMap = function() {
         marker.addListener('click', function() {
           for (var b = 0; b < Model.markers.length; b++) {
                         Model.markers[b].setMap(map);
-                        Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                        Model.markers[b].setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
  //console.log(Model.vm.markerSelect());
                     }
 
-          this.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+          this.setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
             populateInfoWindow(this, largeInfowindow);
 
 
@@ -226,7 +226,7 @@ else{
 
         infowindow.addListener('closeclick', function(){
           //marker.infowindow.close();
-          marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+          marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
           });
   }
 }
@@ -351,7 +351,7 @@ Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
 
               //poop here
               //Model.markers[b].infowindow.close();
-                Model.markers[b].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+                Model.markers[b].setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
 
 
@@ -381,7 +381,7 @@ Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
               Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
               console.log(Model.vm.markerSelect());
             //console.log(Model.vm.citys.indexOf(selection));
-              Model.markers[Model.vm.citys.indexOf(selection)].setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+              Model.markers[Model.vm.citys.indexOf(selection)].setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
 
               ;
 
