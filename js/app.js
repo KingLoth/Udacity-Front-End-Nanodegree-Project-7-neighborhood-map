@@ -52,6 +52,7 @@ var Model = {
         yelpId: ko.observableArray(),
         dropDown: ko.observable(),
         markerSelect: ko.observable(),
+        navOpenNum: ko.observable(),
 
         display: ko.observable(true),
         yelpRating: ko.observable()
@@ -77,7 +78,7 @@ var initMap = function() {
 
 
     ko.applyBindings(Model.vm);
- //console.log(Model.vm.markerSelect());
+
     var viewmodel = new ViewModel();
 
 
@@ -157,55 +158,58 @@ var initMap = function() {
             populateInfoWindow(this, largeInfowindow);
 
 
-
-
-
-            //if (Model.vm.dropDown() > - 1){
-
-            //}
-
-        });
+      });
 Model.vm.dropDown.subscribe(function(){
   var z = document.getElementById("markerSelect").innerHTML;
-  console.log(z);
+  //console.log(z);
 
-  /*if(z == -1){
-    console.log("hellyeah");
-     for (var b = 0; b < Model.markers.length; b++) {
-    markers.infowindow.close(map,Model.markers[b]);
-  }
+if( z == -1){
+  //Do Nothing, No errors!
 }
-else
-{*/
+else{
 populateInfoWindow(Model.markers[z], largeInfowindow);
-//}
 
+}
 });
 
 
         map.fitBounds(bounds);
         //drop marker
     }
-    //console.log(Model.vm.markerSelect());
-//console.log(Model.vm.citys());
+
 };
 
 
 
 function populateInfoWindow(marker, infowindow) {
+
+
     //Check to make sure the infowindow is not already opened on this marker.
     var z = document.getElementById("markerSelect").innerHTML;
-    console.log(z);
+    //console.log(z);
+
+//if(Model.vm.markerSelect == "")
+//{
+
+//}
+
+
     if (z == -1){
-console.log('poop');
+//console.log('Did It!');
   for (var b = 0; b < Model.markers.length; b++) {
 infowindow.close(map, Model.markers[b]);
 Model.vm.markerSelect("");
+Model.
 
 
+
+console.log("I ran ?")
   }
     }
 else{
+
+
+
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
 
@@ -225,10 +229,12 @@ else{
         //Make sure the marker property is cleared if the infowindow is closed.
 
         infowindow.addListener('closeclick', function(){
-          //marker.infowindow.close();
+          marker.infowindow.close();
           marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
           });
   }
+
+
 }
 }
 
@@ -290,9 +296,6 @@ function callYelpAPI(i) {
 function successCallback(response) {
     yelpRating = response.rating;
     var ratingElement = document.getElementById('ratestars');
-    //ratingElement.style.color = "red";
-    //ratingElement.innerHTML = yelpRating;
-    //console.log(yelpRating);
 
 
     var wholeStars = 0;
@@ -343,7 +346,7 @@ var ViewModel = function() {
         if (Model.vm.citys.indexOf(selection) === -1) {
 
 
-Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
+       Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
             for (var b = 0; b < Model.markers.length; b++) {
 
               Model.markers[b].setVisible(true);
@@ -379,7 +382,7 @@ Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
             //populateInfoWindow(Model.markers[Model.vm.citys.indexOf(selection)], InfoWindow);
 
               Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
-              console.log(Model.vm.markerSelect());
+            //  console.log(Model.vm.markerSelect());
             //console.log(Model.vm.citys.indexOf(selection));
               Model.markers[Model.vm.citys.indexOf(selection)].setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
 
@@ -399,9 +402,12 @@ Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
 
+
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+
+
 
 }
