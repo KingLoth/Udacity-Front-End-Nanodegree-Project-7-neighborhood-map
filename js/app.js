@@ -1,8 +1,6 @@
 //Model
 // Map Locations
-
 // make markers observables.
-
 var Model = {
     locations: [{
         title: 'El Famous Burrito',
@@ -75,10 +73,10 @@ var yelpRating;
 var initMap = function() {
 
 
-var p = "yeah";
+    var p = "yeah";
 
     ko.applyBindings(Model.vm);
- //console.log(Model.vm.markerSelect());
+    //console.log(Model.vm.markerSelect());
     var viewmodel = new ViewModel();
 
 
@@ -147,55 +145,50 @@ var p = "yeah";
 
 
         marker.addListener('click', function() {
-          for (var b = 0; b < Model.markers.length; b++) {
-                        Model.markers[b].setMap(map);
-                        Model.markers[b].setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
+            for (var b = 0; b < Model.markers.length; b++) {
+                Model.markers[b].setMap(map);
+                Model.markers[b].setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
- //console.log(Model.vm.markerSelect());
-                    }
 
-          this.setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+            }
+
+            this.setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
             populateInfoWindow(this, largeInfowindow);
 
 
 
-            //if (Model.vm.dropDown() > - 1){
-
-            //}
 
         });
-Model.vm.dropDown.subscribe(function(){
-  var z = document.getElementById("markerSelect").innerHTML;
-console.log(z);
-if (z == -1){
-dePopulateInfoWindows(z);
-//Model.markers[z],largeInfowindow,
-console.log("depop");
-}
-else
-{
-Model.vm.lastinfowindow(z);
-populateInfoWindow(Model.markers[z], largeInfowindow);
-console.log(z);
-console.log("popinfo");
-}
-});
+        Model.vm.dropDown.subscribe(function() {
+            var z = document.getElementById("markerSelect").innerHTML;
+            //console.log("markerSelect is=" +z);
+            if (z == -1 || z == "") {
+                dePopulateInfoWindows(largeInfowindow);
+                //Model.markers[z],largeInfowindow,
+                //  console.log("depop");
+            } else {
+                Model.vm.lastinfowindow(z);
+                populateInfoWindow(Model.markers[z], largeInfowindow);
+                //console.log(z);
+                //console.log("PopInfoWentOff");
+            }
+        });
 
-function dePopulateInfoWindows(){
-var z = document.getElementById("lastinfowindow").innerHTML;
-console.log("it's"+z)
-console.log(Model.markers[z]);
-//Model.markers[z].largeInfowindow.close();
-Model.markers[z].infowindow.close();
-  //infowindow.open(map, marker);
-//infowindow.close(largeInfowindow);
-//largeInfowindow = null;//
-console.log("hi");
-}
+        function dePopulateInfoWindows(largeInfowindow) {
+            var z = document.getElementById("lastinfowindow").innerHTML;
+            //console.log('lastinfowindow is = ' + z);
+            //  console.log(largeInfowindow.close());
+            Model.vm.markerSelect("");
+            largeInfowindow.close();
 
-}
-        map.fitBounds(bounds);
-        //drop marker
+
+
+
+        }
+
+    }
+    map.fitBounds(bounds);
+    //drop marker
 
 
 };
@@ -205,41 +198,40 @@ console.log("hi");
 function populateInfoWindow(marker, infowindow) {
     //Check to make sure the infowindow is not already opened on this marker.
     var z = document.getElementById("markerSelect").innerHTML;
-    console.log(z);
-    if (z == -1){
-console.log('poop');
-  for (var b = 0; b < Model.markers.length; b++) {
-infowindow.close(map, Model.markers[b]);
-Model.vm.markerSelect("");
+    //console.log(z);
+    if (z == -1) {
+        console.log('poop');
+        for (var b = 0; b < Model.markers.length; b++) {
+            infowindow.close(map, Model.markers[b]);
+            Model.vm.markerSelect("");
 
 
-  }
+        }
+    } else {
+        if (infowindow.marker != marker) {
+            infowindow.marker = marker;
+
+
+
+
+            callYelpAPI(marker.id);
+            infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
+                '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' +
+                '<div id="ratestars"></div> ');
+
+            //callYelpAPI(marker.id)
+
+            infowindow.open(map, marker);
+
+
+            //Make sure the marker property is cleared if the infowindow is closed.
+
+            infowindow.addListener('closeclick', function() {
+                //marker.infowindow.close();
+                marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
+            });
+        }
     }
-else{
-    if (infowindow.marker != marker) {
-        infowindow.marker = marker;
-
-
-
-
-        callYelpAPI(marker.id);
-        infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
-            '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' +
-            '<div id="ratestars"></div> ');
-
-        //callYelpAPI(marker.id)
-
-        infowindow.open(map, marker);
-
-
-        //Make sure the marker property is cleared if the infowindow is closed.
-
-        infowindow.addListener('closeclick', function(){
-          //marker.infowindow.close();
-          marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
-          });
-  }
-}
 }
 
 
@@ -300,9 +292,7 @@ function callYelpAPI(i) {
 function successCallback(response) {
     yelpRating = response.rating;
     var ratingElement = document.getElementById('ratestars');
-    //ratingElement.style.color = "red";
-    //ratingElement.innerHTML = yelpRating;
-    //console.log(yelpRating);
+
 
 
     var wholeStars = 0;
@@ -353,24 +343,20 @@ var ViewModel = function() {
         if (Model.vm.citys.indexOf(selection) === -1) {
 
 
-Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
+            Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
             for (var b = 0; b < Model.markers.length; b++) {
 
-              Model.markers[b].setVisible(true);
+                Model.markers[b].setVisible(true);
 
 
-              //poop here
-              //Model.markers[b].infowindow.close();
+
                 Model.markers[b].setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
 
 
 
             }
 
-            /*for (var b = 0; b < Model.locations.length; b++) {
-                Model.vm.array.push(Model.locations[b].title);
-            }
-*/
+
         }
 
         // This checks what city is selected in the drop down
@@ -379,21 +365,17 @@ Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
 
             for (var i = 0; i < Model.markers.length; i++) {
                 Model.markers[i].setVisible(false);
-             //console.log(Model.vm.citys().indexOf(selection));
+
             }
 
-            //Model.vm.array.removeAll();
 
-            //Model.vm.array.push(Model.locations[Model.vm.citys.indexOf(selection)].title);
             Model.markers[Model.vm.citys.indexOf(selection)].setVisible(true);
-            //populateInfoWindow(Model.markers[Model.vm.citys.indexOf(selection)], InfoWindow);
 
-              Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
-              console.log(Model.vm.markerSelect());
-            //console.log(Model.vm.citys.indexOf(selection));
-              Model.markers[Model.vm.citys.indexOf(selection)].setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+            Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
 
-              ;
+            Model.markers[Model.vm.citys.indexOf(selection)].setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+
+            ;
 
 
 
