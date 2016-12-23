@@ -214,121 +214,122 @@ function populateInfoWindow(marker, infowindow) {
 
 
 
-            callYelpAPI(marker.id);
-            infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
-                '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' +
-                '<div id="ratestars"></div> ');
+            //callYelpAPI(marker.id);
 
-            //callYelpAPI(marker.id)
+            function nonce_generate() {
+                return (Math.floor(Math.random() * 1e12).toString());
+            }
 
-            infowindow.open(map, marker);
+            var parameters = {
+                oauth_consumer_key: 'h7e9cHmibtiOAeUH_GJ1QA', //consumer key
+                oauth_token: 'CQpP53MNeigAwK1wYmhwaguuc5I3GvEB', // Token
+                oauth_nonce: nonce_generate(),
+                oauth_timestamp: Math.floor(Date.now() / 1000),
+                oauth_signature_method: 'HMAC-SHA1',
+                oauth_version: '1.0',
+                callback: 'cb',
+                //term:  'Tacos El Norte',
+                //location: 'Highwood,Il'
+                //  id: 'tacos-el-norte-highwood'
+                id: Model.locations[marker.id].yelpId
 
 
-            //Make sure the marker property is cleared if the infowindow is closed.
+            };
+
+            //Consumer Secret         //Token Secret
+            var yelp_url = 'https://api.yelp.com/v2/' + 'business/' + parameters.id;
+
+            //var yelp_url = 'https://api.yelp.com/v2/' + 'search/';
+
+            var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters, '3fH3EJysPQ0Am-C2miz4G_tzirE', '6Vqup-75LvlpqctaNZYerug_rbw');
+            parameters.oauth_signature = encodedSignature;
+
+            var settings = {
+                url: yelp_url,
+                data: parameters,
+                cache: true, // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
+                dataType: 'jsonp',
+                success: function(results) {
+                    successCallback(results);
+                },
+                error: function(results) {
+                    errorCallback(results);
+                    console.log(results);
+                    // Do stuff on fail
+                }
+            };
+
+$.ajax(settings);
+
+
+
+
 
             infowindow.addListener('closeclick', function() {
                 //marker.infowindow.close();
                 marker.setIcon('https://maps.google.com/mapfiles/ms/icons/red-dot.png');
             });
         }
-    }
-}
 
 
-function callYelpAPI(i) {
+        function successCallback(response) {
+            yelpRating = response.rating;
 
-    function nonce_generate() {
-        return (Math.floor(Math.random() * 1e12).toString());
-    }
+            var wholeStars = 0;
+            var wholeStars = Math.floor(yelpRating / 1);
+            var halfStar = yelpRating % 1; //.5
 
-
-
-
-    var parameters = {
-        oauth_consumer_key: 'h7e9cHmibtiOAeUH_GJ1QA', //consumer key
-        oauth_token: 'CQpP53MNeigAwK1wYmhwaguuc5I3GvEB', // Token
-        oauth_nonce: nonce_generate(),
-        oauth_timestamp: Math.floor(Date.now() / 1000),
-        oauth_signature_method: 'HMAC-SHA1',
-        oauth_version: '1.0',
-        callback: 'cb',
-        //term:  'Tacos El Norte',
-        //location: 'Highwood,Il'
-        //  id: 'tacos-el-norte-highwood'
-        id: Model.locations[i].yelpId
+            var starHolder = '';
+            var halfStars = 0; //.5
+            var fullStar = 0;
 
 
-    };
-    //Consumer Secret         //Token Secret
-    var yelp_url = 'https://api.yelp.com/v2/' + 'business/' + parameters.id;
 
-    //var yelp_url = 'https://api.yelp.com/v2/' + 'search/';
 
-    var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters, '3fH3EJysPQ0Am-C2miz4G_tzirE', '6Vqup-75LvlpqctaNZYerug_rbw');
-    parameters.oauth_signature = encodedSignature;
+            for (var a = 0; a < wholeStars; a++) {
 
-    var settings = {
-        url: yelp_url,
-        data: parameters,
-        cache: true, // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
-        dataType: 'jsonp',
-        success: function(results) {
-            successCallback(results);
-        },
-        error: function(results) {
-            errorCallback(results);
-            console.log(results);
-            // Do stuff on fail
+
+
+
+                fullStar = '<img src="images/19x19_5.png" alt="FullStar">'
+
+
+                starHolder = starHolder + fullStar ;
+
+            }
+
+
+            if (halfStar === .5) {
+
+
+                halfStars = '<img src="images/19x19_3_5.png" alt="HalfStar">'
+
+                starHolder = starHolder + halfStars ;
+
+            }
+
+             infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
+                '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' + '<br>' +  starHolder);
+
+infowindow.open(map, marker);
         }
-    };
 
-    // Send AJAX query via jQuery library.
-    $.ajax(settings);
+        function errorCallback(response) {
 
-
-}
-
-
-function successCallback(response) {
-    yelpRating = response.rating;
-    var ratingElement = document.getElementById('ratestars');
+            infowindow.setContent("Error With Yelp AJAX Request");
+            infowindow.open(map, marker);
+        }
 
 
-
-    var wholeStars = 0;
-    var halfStar = 0; //.5
-    var wholeStars = Math.floor(yelpRating / 1);
-    var halfStar = yelpRating % 1; //.5
-
-
-
-
-    for (var a = 0; a < wholeStars; a++) {
-
-        var img = document.createElement("img");
-        img.src = 'images/19x19_5.png';
-        ratingElement.appendChild(img);
 
     }
-
-
-    if (halfStar === .5) {
-
-        var img = document.createElement("img");
-        img.src = 'images/19x19_3_5.png';
-        ratingElement.appendChild(img);
-
-    }
-
-
 }
 
-function errorCallback(response) {
-    var ratingElement = document.getElementById('ratestars');
-    var t = document.createTextNode("Error With Yelp AJAX Request");
-    ratingElement.appendChild(t);
 
-}
+
+
+
+
 
 //ViewModel
 var ViewModel = function() {
@@ -396,4 +397,11 @@ function openNav() {
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 
+}
+
+function googleMapError()
+{
+console.log('Oh, Hi Buddy');
+
+document.getElementById("mybody").innerHTML = "Google Map Load Error!";
 }
