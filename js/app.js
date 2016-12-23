@@ -64,7 +64,6 @@ var Model = {
 
 
 
-
 };
 
 
@@ -204,7 +203,7 @@ function populateInfoWindow(marker, infowindow) {
     var z = document.getElementById("markerSelect").innerHTML;
     //console.log(z);
     if (z == -1) {
-        console.log('poop');
+
         for (var b = 0; b < Model.markers.length; b++) {
             infowindow.close(map, Model.markers[b]);
             Model.vm.markerSelect("");
@@ -263,8 +262,7 @@ function populateInfoWindow(marker, infowindow) {
                 }
             };
 
-$.ajax(settings);
-
+            $.ajax(settings);
 
 
 
@@ -298,7 +296,7 @@ $.ajax(settings);
                 fullStar = '<img src="images/19x19_5.png" alt="FullStar">'
 
 
-                starHolder = starHolder + fullStar ;
+                starHolder = starHolder + fullStar;
 
             }
 
@@ -308,14 +306,14 @@ $.ajax(settings);
 
                 halfStars = '<img src="images/19x19_3_5.png" alt="HalfStar">'
 
-                starHolder = starHolder + halfStars ;
+                starHolder = starHolder + halfStars;
 
             }
 
-             infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
-                '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' + '<br>' +  starHolder);
+            infowindow.setContent('<div style="font-size: large; font-family: Times New Roman", Times, serif;">' + marker.title + '</div> <br>' +
+                '<img src="images/yelp-2c.png" alt="Yelp Logo" style="width:120px;height:70px;">' + '<br>' + starHolder);
 
-infowindow.open(map, marker);
+            infowindow.open(map, marker);
         }
 
         function errorCallback(response) {
@@ -328,9 +326,6 @@ infowindow.open(map, marker);
 
     }
 }
-
-
-
 
 
 
@@ -403,26 +398,25 @@ function closeNav() {
 
 }
 
-function googleMapError()
-{
+function googleMapError() {
 
 
-document.getElementById("mybody").innerHTML = "Google Map Load Error!";
+    document.getElementById("mybody").innerHTML = "Google Map Load Error!";
 }
 
 function sideNavClickName() {
 
 
-  $("li").click(function(){
-      var str = $(this).index();
-//console.log(str);
-google.maps.event.trigger(Model.markers[str], 'click');
-  });
-//answer = $(this).index();
+    $("li").click(function() {
+        var str = $(this).index();
+        //console.log(str);
+        google.maps.event.trigger(Model.markers[str], 'click');
+    });
+    //answer = $(this).index();
 
 
 
-  //console.log('you clicked a name');
+    //console.log('you clicked a name');
 
 
 }
