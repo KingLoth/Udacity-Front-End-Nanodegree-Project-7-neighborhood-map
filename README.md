@@ -1,7 +1,6 @@
-
- # Neighborhood-Map-Project
+# Neighborhood-Map-Project
  
- ### Run program
+### Run program
  * run the index.html file.
  * The google map will load a map of Northern Chicago then drop 5 markers for tacos restaurants in the area.
  
