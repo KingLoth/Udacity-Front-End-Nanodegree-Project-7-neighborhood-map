@@ -53,12 +53,14 @@ var Model = {
         lastinfowindow: ko.observable(),
 
         display: ko.observable(true),
+
         yelpRating: ko.observable()
 
 
     },
     markers: [],
-    map: {}
+    map: {},
+
 
 
 
@@ -151,6 +153,8 @@ var initMap = function() {
 
 
             }
+
+
 
             this.setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
             populateInfoWindow(this, largeInfowindow);
@@ -401,7 +405,24 @@ function closeNav() {
 
 function googleMapError()
 {
-console.log('Oh, Hi Buddy');
+
 
 document.getElementById("mybody").innerHTML = "Google Map Load Error!";
+}
+
+function sideNavClickName() {
+
+
+  $("li").click(function(){
+      var str = $(this).index();
+//console.log(str);
+google.maps.event.trigger(Model.markers[str], 'click');
+  });
+//answer = $(this).index();
+
+
+
+  //console.log('you clicked a name');
+
+
 }

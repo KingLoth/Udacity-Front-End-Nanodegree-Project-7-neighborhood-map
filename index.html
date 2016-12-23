@@ -27,7 +27,8 @@
 <a href="javascript:void(0)"class="closebtn" onclick="closeNav()">&times;</a>
 <a><u>Taco Restaurants</u></a>
 <ul data-bind="foreach: array" style="list-style-type:none" visible: "display">
-<li data-bind="text: $data"></li>
+<li data-bind="text: $data, click: sideNavClickName"></li>
+
 </ul>
 <a>Sort By City</a>
 <ul><select data-bind="options: citys, value: dropDown, optionsCaption: 'Choose City'"></select></ul>
