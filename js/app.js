@@ -341,10 +341,10 @@ var ViewModel = function() {
 
         // This checks if the "Choose City" element is selected in the drop down
         if (Model.vm.citys.indexOf(selection) === -1) {
-
-          for (var b = 0; b < Model.locations.length; b++) {
-              Model.vm.array.push(Model.locations[b].title);
-          }
+            Model.vm.array.removeAll();
+            for (var b = 0; b < Model.locations.length; b++) {
+                Model.vm.array.push(Model.locations[b].title);
+            }
 
 
             Model.vm.markerSelect(Model.vm.citys.indexOf(selection));
@@ -415,27 +415,26 @@ function sideNavClickName() {
 
 
 
-//console.log(this.toString()); yes
+    //console.log(this.toString()); yes
 
-//console.log(Model.locations[1].title); yes
+    //console.log(Model.locations[1].title); yes
 
-var i ;
-for (var i = 0; i < Model.markers.length; i++) {
+    var i;
+    for (var i = 0; i < Model.markers.length; i++) {
 
-  if (this.toString() == Model.locations[i].title)
-  {
-  index = i;
-  }
-
+        if (this.toString() == Model.locations[i].title) {
+            index = i;
+        }
 
 
-  }
+
+    }
     google.maps.event.trigger(Model.markers[index], 'click');
 
-      for (var i = 0; i < Model.markers.length; i++) {
+    for (var i = 0; i < Model.markers.length; i++) {
         Model.markers[i].setVisible(false);
 
-      }
+    }
 
 
     Model.markers[index].setVisible(true);
@@ -443,34 +442,31 @@ for (var i = 0; i < Model.markers.length; i++) {
 
 
 
+    /*
+    Old Code using JQuery
+        $("li").click(function() {
 
-
-
-/*
-Old Code using JQuery
-    $("li").click(function() {
-
-        var str = $(this).index();
-        //console.log(str);
-        google.maps.event.trigger(Model.markers[str], 'click');
-
-
-
-
-        for (var i = 0; i < Model.markers.length; i++) {
-              Model.markers[i].setVisible(false);
-
-          }
-
-
-          Model.markers[str].setVisible(true);
+            var str = $(this).index();
+            //console.log(str);
+            google.maps.event.trigger(Model.markers[str], 'click');
 
 
 
 
-});
+            for (var i = 0; i < Model.markers.length; i++) {
+                  Model.markers[i].setVisible(false);
 
-*/
+              }
+
+
+              Model.markers[str].setVisible(true);
+
+
+
+
+    });
+
+    */
 
 
 }
